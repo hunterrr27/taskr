@@ -192,7 +192,7 @@ export default function DayView() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="flex justify-center text-2xl font-bold mb-4">
-        Schedule for {format(new Date(date.toString().replace(/-/g, '/')), 'MM/dd/yyyy')}
+        Schedule for {date ? format(new Date(date.toString().replace(/-/g, '/')), 'MM/dd/yyyy') : 'Invalid date'}
       </h1>
       <div className='flex justify-around mb-4'>
         <Button variant="outline" onClick={handleBackToDashboard}>Back to Calendar</Button>

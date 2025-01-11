@@ -24,7 +24,8 @@ export default function SignUp() {
     }
 
     return (
-        <div className='flex items-center justify-center min-h-screen bg-gray-100'>
+        <div className='flex-col items-center justify-center min-h-screen bg-gray-100'>
+            
             <motion.div 
                 initial={{ y: 300, opacity: 0 }} 
                 animate={{ y: 0, opacity: 1 }} 

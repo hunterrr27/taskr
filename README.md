@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Task Calendar with Next.js and Supabase
+
+This project is a task management application built with Next.js and Supabase. It features user authentication, a calendar view, and the ability to create and manage tasks for specific dates.
+
+## Features
+
+- User authentication (sign up, sign in, sign out)
+- Calendar view for selecting dates
+- Daily view with time slots from 6 AM to 10 PM
+- Create, read, update, and delete tasks
+- Real-time updates using Supabase
+
+## Technologies Used
+
+- [Next.js](https://nextjs.org/) - React framework for building the frontend and API routes
+- [Supabase](https://supabase.io/) - Open-source Firebase alternative for the backend
+- [shadcn/ui](https://ui.shadcn.com/) - UI component library
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+- [Node.js](https://nodejs.org/) (v14 or later)
+- [npm](https://www.npmjs.com/) (usually comes with Node.js)
+
+You will also need a Supabase account and a new Supabase project.
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/task-calendar.git
+   cd task-calendar
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory and add the following:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+   Replace `your_supabase_project_url` and `your_supabase_anon_key` with your actual Supabase project credentials.
+
+4. Set up the Supabase database:
+   Open the [Supabase SQL Editor](https://app.supabase.io/) and run the following SQL query to create the `tasks` table:
+   ```sql
+   create table tasks (
+     id serial primary key,
+     user_id uuid references auth.users(id) on delete cascade,
+     task_name text not null,
+     task_description text,
+     task_date timestamp not null,
+     created_at timestamp with time zone default now(),
+     updated_at timestamp with time zone default now()
+   );
+   ```
+   This will create a `tasks` table to store tasks for users.
+
+5. Run the development server:
+   ```
+   npm run dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+## Project Structure
+
+```
+task-calendar/
+├── app/
+│   ├── auth/
+│   │   ├── signin/
+│   │   └── signup/
+│   ├── dashboard/
+│   ├── day/
+│   │   └── [date]/
+│   ├── page.tsx
+│   └── layout.tsx
+├── components/
+│   └── ui/
+├── utils/
+│   └── supabase.ts
+├── .env.local
+├── package.json
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Sign up for a new account or sign in if you already have one.
+2. On the dashboard, you'll see a calendar. Click on a date to view or add tasks for that day.
+3. In the day view, you can see existing tasks and create new ones.
+4. To create a task, click the "Create Task" button and fill in the task details.
+5. Tasks will appear in the time slots on the day view.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Contributing
 
-## Learn More
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project is licensed under the MIT License.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Acknowledgements
 
-## Deploy on Vercel
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Supabase Documentation](https://supabase.io/docs)
+- [shadcn/ui Documentation](https://ui.shadcn.com/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

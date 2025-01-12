@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { supabase } from '@/utils/supabase'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/components/ui/card'
@@ -13,21 +13,29 @@ export default function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const router = useRouter()
+    const supabase = createClientComponentClient()
 
     const handleSignIn = async (e: React.FormEvent) => {
         e.preventDefault()
-        const { error } = await supabase.auth.signInWithPassword({ email, password})
-        if (error) {
-            console.error('Error signing in:', error.message)
-        } else {
-            router.push('/dashboard')
+        try {
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            })
+
+            if (error) {
+                console.error('Error signing in:', error.message)
+            } else {
+                router.refresh() // Refresh the server components
+                router.push('/dashboard')
+            }
+        } catch (err) {
+            console.error('Error:', err)
         }
     }
 
     return (
-        
         <div className='flex items-center justify-center min-h-screen bg-gray-100'>
-            
             <motion.div 
                 initial={{ y: 300, opacity: 0 }} 
                 animate={{ y: 0, opacity: 1 }} 

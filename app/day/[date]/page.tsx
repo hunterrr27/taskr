@@ -190,51 +190,53 @@ export default function DayView() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="flex justify-center text-2xl font-bold mb-4">
+    <div className="container max-w-3xl mx-auto px-4 sm:px-6">
+      <h1 className="text-2xl font-bold mb-4 text-center">
         Schedule for {date ? format(new Date(date.toString().replace(/-/g, '/')), 'MM/dd/yyyy') : 'Invalid date'}
       </h1>
-      <div className='flex justify-around mb-4'>
+      <div className='flex justify-center gap-4 mb-4'>
         <Button variant="outline" onClick={handleBackToDashboard}>Back to Calendar</Button>
         <Button onClick={() => setIsDialogOpen(true)}>Create Task</Button>
       </div>
       
-      <div className="grid grid-cols-[5rem_1fr] divide-y">
-        {timeSlots.map((time) => {
-          const slotsForThisTime = getTasksForTimeSlot(time)
-          
-          return (
-            <div key={time} className="contents">
-              <div className="h-[3rem] relative border-t">
-                <div className="absolute w-full right-2 text-right text-sm text-gray-600" style={{ top: '0%' }}>
-                  {time}
+      <div className="w-full overflow-x-hidden">
+        <div className="grid grid-cols-[4.5rem_1fr] divide-y">
+          {timeSlots.map((time) => {
+            const slotsForThisTime = getTasksForTimeSlot(time)
+            
+            return (
+              <div key={time} className="contents">
+                <div className="h-[3rem] relative border-t">
+                  <div className="absolute w-full right-2 text-right text-sm text-gray-600" style={{ top: '0%' }}>
+                    {time}
+                  </div>
+                </div>
+                <div className="min-h-[3rem] relative border-t">
+                  {slotsForThisTime.map((task) => {
+                    const display = getTaskDisplay(task)
+                    return (
+                      <div
+                        key={task.id}
+                        className="bg-blue-100 p-2 rounded cursor-pointer hover:bg-blue-200 absolute inset-x-0 mx-1 flex items-center text-sm sm:text-base"
+                        style={{
+                          top: `${display.topOffset}%`,
+                          height: `${display.heightPercent}%`,
+                          zIndex: 10
+                        }}
+                        onDoubleClick={() => {
+                          setEditingTask(task)
+                          setIsEditDialogOpen(true)
+                        }}
+                      >
+                        {task.name}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
-              <div className="min-h-[3rem] relative">
-                {slotsForThisTime.map((task) => {
-                  const display = getTaskDisplay(task)
-                  return (
-                    <div
-                      key={task.id}
-                      className="bg-blue-100 p-2 rounded cursor-pointer hover:bg-blue-200 absolute inset-x-0 mx-1 flex items-center"
-                      style={{
-                        top: `${display.topOffset}%`,
-                        height: `${display.heightPercent}%`,
-                        zIndex: 10
-                      }}
-                      onDoubleClick={() => {
-                        setEditingTask(task)
-                        setIsEditDialogOpen(true)
-                      }}
-                    >
-                      {task.name}
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       {/* Create Task Dialog */}
